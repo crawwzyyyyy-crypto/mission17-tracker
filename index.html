@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101114">
+<meta name="description" content="Mission 17 daily discipline tracker for NDA, SSB, fitness and recovery.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<title>Mission 17</title>
+<style>
+:root{color-scheme:dark;--bg:#0b0c0f;--panel:#14161b;--panel2:#1c1f26;--line:#2a2e37;--text:#f5f6f8;--muted:#a3a8b3;--accent:#e5e7eb;--green:#8dd8ad;--orange:#ffc777;--red:#ff8c8c}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#191c23 0%,var(--bg) 50%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.45}
+.wrap{max-width:760px;margin:auto;padding:18px 14px 44px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 18px}.eyebrow{font-size:11px;letter-spacing:.16em;color:var(--muted);font-weight:700}.title{font-size:28px;letter-spacing:-.04em;font-weight:850;margin:2px 0}.sub{font-size:13px;color:var(--muted)}.date{color:var(--muted);font-size:12px;text-align:right}
+button,select{font:inherit}button{cursor:pointer;border:1px solid var(--line);border-radius:12px;background:var(--panel2);color:var(--text);padding:10px 12px;font-weight:650}button:active{transform:scale(.99)}button.primary{background:#f1f2f4;color:#121318;border-color:#f1f2f4}button.small{padding:7px 10px;font-size:12px}
+.hero{background:linear-gradient(145deg,#1b1e25,#121419);border:1px solid var(--line);border-radius:22px;padding:17px;margin-bottom:14px}.herohead{display:flex;justify-content:space-between;align-items:start;gap:10px}.progressnum{font-size:30px;font-weight:850;letter-spacing:-.05em}.muted{color:var(--muted)}.bar{height:8px;border-radius:99px;background:#30343d;overflow:hidden;margin:10px 0 7px}.fill{height:100%;width:0;background:linear-gradient(90deg,#a8e6bd,#f0f2f5);border-radius:99px;transition:width .2s}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.stat{background:#0f1116;border:1px solid var(--line);border-radius:13px;padding:10px}.stat strong{display:block;font-size:19px}.stat span{font-size:11px;color:var(--muted)}
+.tabs{display:flex;gap:7px;overflow:auto;margin:14px 0}.tab{white-space:nowrap;background:transparent}.tab.active{background:#e9ebef;color:#111318;border-color:#e9ebef}
+.section{margin:18px 0}.sectionhead{display:flex;justify-content:space-between;align-items:center;margin:0 2px 9px}.sectionhead h2{font-size:12px;letter-spacing:.12em;color:var(--muted);margin:0}.count{font-size:11px;color:var(--muted)}
+.habit{display:flex;align-items:center;gap:12px;padding:12px;margin:7px 0;border:1px solid var(--line);background:rgba(21,23,29,.94);border-radius:15px;min-height:64px}.check{appearance:none;width:23px;height:23px;flex:0 0 23px;border:1.5px solid #656b77;border-radius:7px;display:grid;place-items:center;margin:0;background:#101217}.check:checked{background:#e8ebef;border-color:#e8ebef}.check:checked:after{content:"✓";font-size:16px;font-weight:900;color:#111318}.habit.done .habitname{text-decoration:line-through;color:#a8adb6}.habittext{flex:1;min-width:0}.habitname{font-weight:700;font-size:14px}.habitdetail{font-size:12px;color:var(--muted);margin-top:2px}.habitmeta{font-size:11px;color:var(--muted);text-align:right;min-width:42px}
+.noteBox{width:100%;min-height:92px;resize:vertical;border:1px solid var(--line);border-radius:14px;padding:12px;background:#101217;color:var(--text);font:inherit}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:15px;margin:10px 0}.card h3{margin:0 0 8px;font-size:16px}.historyrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}.historyrow:last-child{border-bottom:0}.pill{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:4px 8px;font-size:11px;color:var(--muted)}
+input[type=date]{background:#101217;border:1px solid var(--line);border-radius:10px;color:var(--text);padding:8px;max-width:100%}
+.footer{color:var(--muted);font-size:11px;text-align:center;margin-top:25px}.hidden{display:none!important}.empty{color:var(--muted);font-size:13px;padding:16px 0}.notice{font-size:12px;color:var(--muted);margin-top:9px}
+@media(min-width:600px){.wrap{padding:26px 22px 50px}.title{font-size:34px}.habit{padding:14px}.stats{gap:12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div><div class="eyebrow">DAILY DISCIPLINE SYSTEM</div><div class="title">MISSION 17</div><div class="sub">NDA · SSB · FITNESS · RECOVERY</div></div>
+    <div><div class="date" id="todayLabel"></div><button id="installBtn" class="small hidden" style="margin-top:8px">Install app</button></div>
+  </header>
+
+  <section class="hero">
+    <div class="herohead">
+      <div><div class="muted" style="font-size:12px;font-weight:700">TODAY'S PROGRESS</div><div><span class="progressnum" id="percent">0%</span> <span class="muted" id="doneLabel">0 of 12 habits</span></div></div>
+      <span class="pill" id="dayPill">TODAY</span>
+    </div>
+    <div class="bar"><div class="fill" id="progressFill"></div></div>
+    <div class="row"><span class="muted" style="font-size:12px" id="message">Start with the next small action.</span><button class="small" id="todayBtn">Today</button></div>
+    <div class="stats">
+      <div class="stat"><strong id="streak">0</strong><span>DAY STREAK*</span></div>
+      <div class="stat"><strong id="weekRate">0%</strong><span>7-DAY RATE</span></div>
+      <div class="stat"><strong id="bestDay">—</strong><span>BEST DAY</span></div>
+    </div>
+    <div class="notice">*Streak = consecutive days with at least 80% of habits completed.</div>
+  </section>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="today">Today</button>
+    <button class="tab" data-tab="weekly">Weekly report</button>
+    <button class="tab" data-tab="history">History</button>
+    <button class="tab" data-tab="backup">Backup</button>
+  </nav>
+
+  <main id="todayView">
+    <div class="row" style="margin:8px 2px 14px"><div><strong id="checklistTitle">Today's checklist</strong><div class="sub">Ticks save automatically on this device.</div></div><button class="small" id="clearToday">Uncheck all</button></div>
+    <div id="habits"></div>
+    <section class="card">
+      <h3>Daily reflection</h3>
+      <div class="sub" style="margin-bottom:8px">What went well? What will I improve tomorrow?</div>
+      <textarea id="dailyNote" class="noteBox" placeholder="Write a few honest lines…"></textarea>
+      <div class="notice">Saved automatically. Keep it factual, not perfect.</div>
+    </section>
+  </main>
+
+  <main id="weeklyView" class="hidden">
+    <section class="card"><h3>Last 7 days</h3><div class="sub">Today and the previous six calendar days.</div><div id="weeklySummary" style="margin-top:12px"></div></section>
+    <section class="card"><h3>Daily completion</h3><div id="weekBars"></div></section>
+    <section class="card"><h3>Category breakdown</h3><div id="categorySummary"></div></section>
+  </main>
+
+  <main id="historyView" class="hidden">
+    <section class="card">
+      <div class="row"><h3 style="margin:0">Browse a day</h3><input type="date" id="historyDate"></div>
+      <div id="historyDetail" style="margin-top:12px"></div>
+    </section>
+    <section class="card"><h3>Recent days</h3><div id="historyList"></div></section>
+  </main>
+
+  <main id="backupView" class="hidden">
+    <section class="card">
+      <h3>Export your data</h3><p class="sub">Download a JSON backup containing your daily ticks and reflections. Store it somewhere safe.</p>
+      <button class="primary" id="exportBtn">Export backup</button>
+    </section>
+    <section class="card">
+      <h3>Restore a backup</h3><p class="sub">Restore a previously exported Mission 17 JSON file. This merges the saved dates into this device's records.</p>
+      <input type="file" id="importFile" accept="application/json,.json" style="max-width:100%;color:var(--muted);margin-bottom:12px"><br>
+      <button id="importBtn">Import backup</button><div id="importStatus" class="notice"></div>
+    </section>
+    <section class="card">
+      <h3>Data and privacy</h3>
+      <p class="sub">Your tracker stores information locally in this browser. It does not create an account or send your habits to a server. Browser data can be lost if you clear site storage, so export backups periodically.</p>
+      <button id="resetAll" style="border-color:#754343;color:#ffaaaa">Delete all tracker data</button>
+    </section>
+  </main>
+  <div class="footer">MISSION 17 · Show up, review honestly, repeat tomorrow.</div>
+</div>
+<script>
+const GROUPS = [
+ {name:"FITNESS",items:[
+  ["run","Complete planned run","Easy, speed or long-run session as scheduled"],
+  ["gym","Complete gym session","Train with good form; adjust load for recovery"],
+  ["fuel","Eat enough for weight gain","Meals + protein; monitor weekly weight"]
+ ]},
+ {name:"NDA PREPARATION",items:[
+  ["notes","Make / organize class notes","Concise, exam-focused notes from the last class"],
+  ["revision","Active revision + questions","Recall from memory and solve practice questions"]
+ ]},
+ {name:"SSB DEVELOPMENT",items:[
+  ["english","English speaking practice","Speak aloud or record a 2–3 minute answer"],
+  ["ssb","SSB task practice","Story, situation response, reasoning or interview practice"],
+  ["current","Current affairs","Read one important story and summarize it"],
+  ["action","Initiative / responsibility","Take a real responsibility or follow through on a task"]
+ ]},
+ {name:"RECOVERY & DISCIPLINE",items:[
+  ["sleep","Meet sleep target","Aim for 7–9 hours total actual sleep per 24 hours"],
+  ["water","Hydration check","Drink regularly; account for sweat and thirst"],
+  ["review","Daily reflection","Write one win and one improvement for tomorrow"]
+ ]}
+];
+const ALL = GROUPS.flatMap(g=>g.items.map(x=>x[0]));
+const STORE = "mission17_v1";
+const todayISO = () => { const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; };
+const dateFromISO = s => {const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d,12,0,0,0)};
+const shiftDate = (iso,n) => {const d=dateFromISO(iso);d.setDate(d.getDate()+n);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`};
+const prettyDate = iso => dateFromISO(iso).toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric",year:"numeric"});
+const shortDate = iso => dateFromISO(iso).toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"});
+const $ = id => document.getElementById(id);
+let data = loadData(), selectedDate=todayISO(), deferredInstall=null;
+function blankDay(){return {checks:{},note:""}}
+function loadData(){try{const d=JSON.parse(localStorage.getItem(STORE)||"{}");if(!d.days)d.days={};return d}catch(e){return {days:{}}}}
+function saveData(){localStorage.setItem(STORE,JSON.stringify(data))}
+function getDay(iso){if(!data.days[iso])data.days[iso]=blankDay();if(!data.days[iso].checks)data.days[iso].checks={};return data.days[iso]}
+function countDay(iso){const d=data.days[iso];return d?ALL.filter(k=>d.checks&&d.checks[k]).length:0}
+function rateDay(iso){return Math.round(countDay(iso)/ALL.length*100)}
+function isQualified(iso){return !!data.days[iso]&&rateDay(iso)>=80}
+function datesBack(n,from=todayISO()){return Array.from({length:n},(_,i)=>shiftDate(from,i-(n-1)))}
+function streak(){let s=0,day=todayISO();if(!isQualified(day))day=shiftDate(day,-1);for(let i=0;i<400;i++){if(isQualified(day)){s++;day=shiftDate(day,-1)}else break}return s}
+function allTimeBest(){const vals=Object.keys(data.days).map(d=>({d,r:rateDay(d)})).sort((a,b)=>b.r-a.r||b.d.localeCompare(a.d));return vals.length?vals[0]:null}
+function render(){if(selectedDate>todayISO())selectedDate=todayISO();const d=getDay(selectedDate),isToday=selectedDate===todayISO();$("todayLabel").textContent=prettyDate(todayISO());$("dayPill").textContent=isToday?"TODAY":"HISTORY";$("checklistTitle").textContent=isToday?"Today's checklist":prettyDate(selectedDate);$("todayBtn").classList.toggle("hidden",isToday);$("clearToday").textContent=isToday?"Uncheck all":"Clear this day";
+ let count=ALL.filter(k=>d.checks[k]).length,rate=Math.round(count/ALL.length*100);
+ $("percent").textContent=rate+"%";$("doneLabel").textContent=`${count} of ${ALL.length} habits`;$("progressFill").style.width=rate+"%";$("message").textContent=rate===100?"All habits complete. Great work.":rate>=80?"Strong day. Finish what matters.":rate>=40?"Good progress. Keep going.":"Start with the next small action.";
+ $("streak").textContent=streak();const week=datesBack(7);$("weekRate").textContent=Math.round(week.reduce((s,x)=>s+rateDay(x),0)/7)+"%";const best=allTimeBest();$("bestDay").textContent=best?best.r+"%":"—";
+ $("habits").innerHTML="";GROUPS.forEach(g=>{const sec=document.createElement("section");sec.className="section";const done=g.items.filter(x=>d.checks[x[0]]).length;sec.innerHTML=`<div class="sectionhead"><h2>${g.name}</h2><span class="count">${done}/${g.items.length}</span></div>`;g.items.forEach(([key,name,detail])=>{const label=document.createElement("label");label.className="habit"+(d.checks[key]?" done":"");const cb=document.createElement("input");cb.type="checkbox";cb.className="check";cb.checked=!!d.checks[key];cb.disabled=!isToday;cb.setAttribute("aria-label",name);cb.addEventListener("change",()=>{getDay(selectedDate).checks[key]=cb.checked;saveData();render()});const txt=document.createElement("div");txt.className="habittext";const nm=document.createElement("div");nm.className="habitname";nm.textContent=name;const dt=document.createElement("div");dt.className="habitdetail";dt.textContent=detail;txt.append(nm,dt);const meta=document.createElement("div");meta.className="habitmeta";meta.textContent=d.checks[key]?"DONE":"";label.append(cb,txt,meta);sec.append(label)});$("habits").append(sec)});
+ $("dailyNote").value=d.note||"";$("dailyNote").disabled=!isToday;
+ renderWeekly();renderHistory();
+}
+function renderWeekly(){const ds=datesBack(7),sum=ds.reduce((a,x)=>a+countDay(x),0),possible=7*ALL.length,avg=Math.round(sum/possible*100),qualified=ds.filter(isQualified).length;$("weeklySummary").innerHTML=`<div class="stats"><div class="stat"><strong>${avg}%</strong><span>OVERALL RATE</span></div><div class="stat"><strong>${qualified}/7</strong><span>DAYS ≥80%</span></div><div class="stat"><strong>${sum}</strong><span>HABITS DONE</span></div></div>`;
+ $("weekBars").innerHTML=ds.map(iso=>`<div class="historyrow"><div style="min-width:74px;font-size:12px">${shortDate(iso)}</div><div style="flex:1"><div class="bar" style="margin:0;height:7px"><div class="fill" style="width:${rateDay(iso)}%"></div></div></div><div style="width:40px;text-align:right;font-size:12px">${rateDay(iso)}%</div></div>`).join("");
+ $("categorySummary").innerHTML=GROUPS.map(g=>{const keys=g.items.map(x=>x[0]);const n=ds.reduce((s,iso)=>s+keys.filter(k=>data.days[iso]?.checks?.[k]).length,0);return `<div class="historyrow"><div>${g.name}</div><div><strong>${n}</strong><span class="muted"> / ${keys.length*7}</span></div></div>`}).join("")}
+function renderHistory(){const input=$("historyDate");if(!input.value)input.value=todayISO();const iso=input.value||todayISO(),d=data.days[iso];if(!d){$("historyDetail").innerHTML=`<div class="empty">No saved record for ${prettyDate(iso)} yet.</div>`}else{$("historyDetail").innerHTML=`<div class="row"><strong>${prettyDate(iso)}</strong><span class="pill">${rateDay(iso)}% · ${countDay(iso)}/${ALL.length}</span></div><div style="margin-top:10px">${GROUPS.map(g=>`<div style="margin:10px 0"><div class="muted" style="font-size:11px">${g.name}</div>${g.items.map(x=>`<div class="historyrow"><span>${x[1]}</span><span>${d.checks[x[0]]?"✓":"—"}</span></div>`).join("")}</div>`).join("")}</div>${d.note?`<div class="card"><strong>Reflection</strong><p>${escapeHtml(d.note).replace(/\n/g,"<br>")}</p></div>`:""}`}
+ const keys=Object.keys(data.days).filter(x=>x<=todayISO()).sort((a,b)=>b.localeCompare(a)).slice(0,14);$("historyList").innerHTML=keys.length?keys.map(x=>`<div class="historyrow"><div><strong>${shortDate(x)}</strong><div class="muted" style="font-size:11px">${countDay(x)} of ${ALL.length} habits</div></div><span class="pill">${rateDay(x)}%</span></div>`).join(""):`<div class="empty">Your completed days will appear here.</div>`;
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function showTab(tab){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));["today","weekly","history","backup"].forEach(t=>$(t+"View").classList.toggle("hidden",t!==tab));if(tab==="today")selectedDate=todayISO();render()}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
+$("todayBtn").addEventListener("click",()=>{selectedDate=todayISO();render()});
+$("dailyNote").addEventListener("input",()=>{if(selectedDate===todayISO()){getDay(selectedDate).note=$("dailyNote").value;saveData()}});
+$("clearToday").addEventListener("click",()=>{if(!confirm("Uncheck all habits for this selected day?"))return;getDay(selectedDate).checks={};saveData();render()});
+$("historyDate").addEventListener("change",renderHistory);
+$("exportBtn").addEventListener("click",()=>{const blob=new Blob([JSON.stringify({app:"Mission 17",version:1,exportedAt:new Date().toISOString(),data},null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="mission17-backup-"+todayISO()+".json";a.click();URL.revokeObjectURL(a.href)});
+$("importBtn").addEventListener("click",async()=>{const f=$("importFile").files[0];if(!f){$("importStatus").textContent="Choose a backup JSON file first.";return}try{const obj=JSON.parse(await f.text()),incoming=obj.data||obj;if(!incoming.days)throw Error("Invalid backup");data.days={...data.days,...incoming.days};saveData();render();$("importStatus").textContent="Backup imported successfully."}catch(e){$("importStatus").textContent="Could not import that file. Check that it is a Mission 17 JSON backup."}});
+$("resetAll").addEventListener("click",()=>{if(confirm("Permanently delete all Mission 17 data on this device? Export a backup first if you want to keep it.")){localStorage.removeItem(STORE);data={days:{}};selectedDate=todayISO();render()}});
+if("serviceWorker" in navigator && location.protocol!=="file:"){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}))}
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstall=e;$("installBtn").classList.remove("hidden")});
+$("installBtn").addEventListener("click",async()=>{if(!deferredInstall){alert('Open Chrome menu (⋮) and choose "Install app" or "Add to Home screen".');return}deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;$("installBtn").classList.add("hidden")});
+window.addEventListener("storage",()=>{data=loadData();render()});
+if($("historyDate"))$("historyDate").value=todayISO();
+render();
+</script>
+</body>
+</html>

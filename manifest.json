@@ -1,0 +1,26 @@
+{
+  "id": "./",
+  "name": "Mission 17 \u2014 Daily Discipline",
+  "short_name": "Mission 17",
+  "description": "Daily NDA, SSB, fitness and recovery habit tracker.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b0c0f",
+  "theme_color": "#101114",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
